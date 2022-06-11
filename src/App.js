@@ -1,5 +1,5 @@
 import { Box, Flex , useColorMode} from '@chakra-ui/react';
-import {BrowserRouter as Router,Routes,Route} from 'react-router-dom'
+import {HashRouter as Router,Routes,Route} from 'react-router-dom'
 import './App.css';
 import Header from './components/Header';
 import NoteList from './pages/NoteList'
@@ -14,7 +14,7 @@ function App() {
     <Router>
     <Flex justify='center' height='743' >
     <Box  w='590px' h='700px' borderX='2px' borderBottom='2px'
-     borderColor={colorMode === 'light'? 'gray.200': 'gray.600'} 
+     borderColor={colorMode === 'light'? 'blue.50': 'gray.600'} 
     borderBottomRadius='15' >
       
   <Header />

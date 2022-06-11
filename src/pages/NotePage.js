@@ -17,30 +17,31 @@ function NotePage() {
    
   const getNote = async () => {
     if(noteId === 'new') return;
-    let response = await fetch(`https://fake-server-levi.herokuapp.com/notes/${noteId}/`);
+    let response = await fetch(`http://127.0.0.1:8000/api/notes/${noteId}/`);
     let data = await response.json();
     setNote(data.body)
   }
 
   const updateNote = async () => {
-     await fetch(`https://fake-server-levi.herokuapp.com/notes/${noteId}/`, {method: 'PUT', 
-     headers: { 'Content-Type': 'application/json'}, body: JSON.stringify({ 'body':note , 'updated': new Date()}) }
+     await fetch(`http://127.0.0.1:8000/api/notes/${noteId}/`, {method: 'PUT', 
+     headers: { 'Content-Type': 'application/json'}, body: JSON.stringify({ 'body':note }) }
      )
      history('/')
   }
 
   const createNote = async () => {
-    if(note===!null){
-    await fetch(`https://fake-server-levi.herokuapp.com/notes/`, {method: 'POST', 
-    headers: { 'Content-Type': 'application/json'}, body: JSON.stringify({ 'body':note , 'updated': new Date()}) }
+    console.log('create')
+    if(note!==null){
+    await fetch(`http://127.0.0.1:8000/api/notes/`, {method: 'POST', 
+    headers: { 'Content-Type': 'application/json'}, body: JSON.stringify({ 'body':note}) }
     )
     history('/')
     } else {history('/')}
  }
   
   const deleteNote = async () => {
-    await fetch(`https://fake-server-levi.herokuapp.com/notes/${noteId}`, {method: 'DELETE', 
-    headers: { 'Content-Type': 'application/json'}, body: JSON.stringify() }
+    await fetch(`http://127.0.0.1:8000/api/notes/${noteId}/`, {method: 'DELETE', 
+    headers: { 'Content-Type': 'application/json'}}
     )
     history('/')
   }
@@ -50,7 +51,7 @@ function NotePage() {
      deleteNote()
    } else if(noteId !== 'new'){
      updateNote()
-   } else if (noteId === 'new' && note === !null){
+   } else if (noteId === 'new' && note !== null){
      createNote()
    }
    else{history('/')}
@@ -73,7 +74,7 @@ function NotePage() {
     <IconButton icon={<DeleteIcon/>} m='3' onClick={deleteNote} colorScheme='red' />} 
     </Flex>
 
-     <Textarea h='590px' w='100%' m='1' bgColor='transparent' fontSize='18px'
+     <Textarea h='590px' w='100%' m='1' bgColor='transparent' fontSize='20px'
      variant='foutline' resize ='none' value={note} className='scroll-hidden'
      onChange={(evnt) => { 
       setNote(evnt.target.value)

@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom'
-import {Box, IconButton, Flex,Text} from '@chakra-ui/react'
+import {Box, IconButton, Flex,Text , useColorModeValue} from '@chakra-ui/react'
 import '../App.css';
 import { AddIcon } from '@chakra-ui/icons';
 
@@ -13,7 +13,7 @@ function NoteList() {
   },[])
 
   let getNotes = async () => {
-  let response = await fetch('https://fake-server-levi.herokuapp.com/notes/');
+  let response = await fetch('http://127.0.0.1:8000/api/notes/');
   let data = await response.json();
     setNotes(data)
   }
@@ -36,30 +36,33 @@ function NoteList() {
       return
     }else{
       return '-' + content
-    }
-     
+    }  
    }
+
+   const bg = useColorModeValue('gray.50', 'gray.900')
+   const bg2 = useColorModeValue('blue.400', 'blue.800')
+
 
   return (
     <Box w='100%' >
     <Flex m='2'>
-        <Text alignSelf='center' color='blue.300' ml='3' fontSize='22px' fontWeight='600' >{notes.length}</Text>
+        <Text alignSelf='center' color={bg2} ml='3' fontSize='22px' fontWeight='600'>{notes.length}</Text>
       </Flex>
 
     <Flex overflowY='scroll' h='588px' className='scroll-hidden'>  
     <Box w='100%' >  
     { notes.map(note=>(
      <Link to={`/note/${note.id}`} key={note.id}>
-       <Flex flexDirection='column' fontWeight='600' fontSize='18px' 
+       <Flex flexDirection='column' fontWeight='600' fontSize='20px' 
        p='2' px='4' borderStyle='solid' borderBottomWidth='0' 
-       _hover={{bgColor: 'white'}}  >
+       _hover={{bgColor: bg}}  >
       {getTitle(note)}
        
        <Flex mt='1'>
        <Box fontWeight='500' fontSize='16px'> {
         new Date(note.updated).toLocaleDateString()
       } </Box>
-      <Box fontWeight='500' ml='2' fontSize='16px'> {getBody(note)} </Box>
+      <Box fontWeight='500' ml='2' fontSize='18px'> {getBody(note)} </Box>
        </Flex>
 
       </Flex>

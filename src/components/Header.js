@@ -1,4 +1,4 @@
-import { Box, Flex, Switch,Text ,  useColorMode} from '@chakra-ui/react'
+import { Box, Flex, Switch,Text ,  useColorMode, Heading} from '@chakra-ui/react'
 import React from 'react'
 
 function Header() {   
@@ -11,8 +11,8 @@ function Header() {
       backdropBlur='8px' 
      bgColor={colorMode === 'light'? 'blue.100': 'gray.700'} 
     mx='1'px='5' borderBottomRadius="5px">
-    <Box flexBasis='250' fontWeight='600'fontSize={32}>
-      Notes 
+    <Box flexBasis='250' >
+       <Heading fontWeight='500' >Notes</Heading>
     </Box>
     
     <Switch mx='3' alignSelf='center' colorScheme='black' size='lg'
