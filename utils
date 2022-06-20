@@ -1,0 +1,30 @@
+ const getNote = async () => {
+    if(noteId === 'new') return;
+    let response = await fetch(`http://127.0.0.1:8000/api/notes/${noteId}/`);
+    let data = await response.json();
+    setNote(data.body)
+  }
+
+  const updateNote = async () => {
+     await fetch(`http://127.0.0.1:8000/api/notes/${noteId}/`, {method: 'PUT', 
+     headers: { 'Content-Type': 'application/json'}, body: JSON.stringify({ 'body':note }) }
+     )
+     history('/')
+  }
+
+  const createNote = async () => {
+    console.log('create')
+    if(note!==null){
+    await fetch(`http://127.0.0.1:8000/api/notes/`, {method: 'POST', 
+    headers: { 'Content-Type': 'application/json'}, body: JSON.stringify({ 'body':note}) }
+    )
+    history('/')
+    } else {history('/')}
+ }
+  
+  const deleteNote = async () => {
+    await fetch(`http://127.0.0.1:8000/api/notes/${noteId}/`, {method: 'DELETE', 
+    headers: { 'Content-Type': 'application/json'}}
+    )
+    history('/')
+  }

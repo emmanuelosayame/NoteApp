@@ -1,23 +1,31 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom'
-import {Box, IconButton, Flex,Text , useColorModeValue} from '@chakra-ui/react'
+import {Box, IconButton, Flex,Text , useColorModeValue, Spinner} from '@chakra-ui/react'
 import '../App.css';
 import { AddIcon } from '@chakra-ui/icons';
 
 
-function NoteList() {
+function NoteList({data, error}) {
 
-  const [notes, setNotes] = useState([]);
-  useEffect(()=>{
-    getNotes()
-  },[])
+  // const [notes, setNotes] = useState([]);
+  // useEffect(()=>{
+  //   getNotes()
+  // },[])
 
-  let getNotes = async () => {
-  let response = await fetch('http://127.0.0.1:8000/api/notes/');
-  let data = await response.json();
-    setNotes(data)
-  }
- 
+  // let fetcher = async () => {
+  // let response = await fetch('https://fake-server-levi.herokuapp.com/notes/');
+  // let data = await response.json();
+  //   setNotes(data)
+  // }
+
+//  const url = 'https://fake-server-levi.herokuapp.com/notes/'
+  // const fetcher = (url) => fetch(url).then (res => res.json())
+  // const { data , error } = useSWR('https://fake-server-levi.herokuapp.com/notes/', fetcher,
+  // {revalidateOnFocus:false}
+  // )
+
+  const notes = data
+
   const getTitle = (notes) => {
     let title = String(notes.body).split('\n')[0]
 
@@ -42,6 +50,12 @@ function NoteList() {
    const bg = useColorModeValue('gray.50', 'gray.900')
    const bg2 = useColorModeValue('blue.400', 'blue.800')
 
+   if (error) return <Text fontSize='30' >failed to load notes</Text>
+   if (!notes) return(
+         <Flex justify='center' alignItems='center' w='100%' h='600px' >
+         <Spinner  />
+         </Flex>
+         )
 
   return (
     <Box w='100%' >

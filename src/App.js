@@ -4,10 +4,16 @@ import './App.css';
 import Header from './components/Header';
 import NoteList from './pages/NoteList'
 import NotePage from './pages/NotePage'
+import  useSWR  from 'swr'
 
 
 function App() {
  
+  const fetcher = (url) => fetch(url).then (res => res.json())
+  const { data , error } = useSWR('https://fake-server-levi.herokuapp.com/notes/', fetcher,
+  {revalidateOnFocus:false, refreshInterval: 2000, }
+  )
+
   const {colorMode} = useColorMode();
 
   return (
@@ -20,8 +26,8 @@ function App() {
   <Header />
       <Flex w='100%'mt='8px' >
       <Routes>
-      <Route index path="/" element={<NoteList />} />
-      <Route path="/note/:id" element ={<NotePage animate={true} />} />
+      <Route index path="/" element={<NoteList data={data} error={error}  />} />
+      <Route path="/note/:id" element ={<NotePage animate={true}  data={data} />} />
       </Routes>
       </Flex>
       </Box>
