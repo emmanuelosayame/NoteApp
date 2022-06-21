@@ -1,30 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom'
-import {Box, IconButton, Flex,Text , useColorModeValue, Spinner} from '@chakra-ui/react'
+import {Box, IconButton, Flex,Text , useColorModeValue} from '@chakra-ui/react'
 import '../App.css';
 import { AddIcon } from '@chakra-ui/icons';
 
 
-function NoteList({data, error}) {
-
-  // const [notes, setNotes] = useState([]);
-  // useEffect(()=>{
-  //   getNotes()
-  // },[])
-
-  // let fetcher = async () => {
-  // let response = await fetch('https://fake-server-levi.herokuapp.com/notes/');
-  // let data = await response.json();
-  //   setNotes(data)
-  // }
-
-//  const url = 'https://fake-server-levi.herokuapp.com/notes/'
-  // const fetcher = (url) => fetch(url).then (res => res.json())
-  // const { data , error } = useSWR('https://fake-server-levi.herokuapp.com/notes/', fetcher,
-  // {revalidateOnFocus:false}
-  // )
-
-  const notes = data
+function NoteList({notes}) {
 
   const getTitle = (notes) => {
     let title = String(notes.body).split('\n')[0]
@@ -50,12 +31,12 @@ function NoteList({data, error}) {
    const bg = useColorModeValue('gray.50', 'gray.900')
    const bg2 = useColorModeValue('blue.400', 'blue.800')
 
-   if (error) return <Text fontSize='30' >failed to load notes</Text>
-   if (!notes) return(
-         <Flex justify='center' alignItems='center' w='100%' h='600px' >
-         <Spinner  />
-         </Flex>
-         )
+  //  if (error) return <Text fontSize='30' >failed to load notes</Text>
+  //  if (!notes) return(
+  //        <Flex justify='center' alignItems='center' w='100%' h='600px' >
+  //        <Spinner  />
+  //        </Flex>
+  //        )
 
   return (
     <Box w='100%' >
@@ -65,7 +46,7 @@ function NoteList({data, error}) {
 
     <Flex overflowY='scroll' h='588px' className='scroll-hidden'>  
     <Box w='100%' >  
-    { notes.map(note=>(
+    {notes?.map(note=>(
      <Link to={`/note/${note.id}`} key={note.id}>
        <Flex flexDirection='column' fontWeight='600' fontSize='20px' 
        p='2' px='4' borderStyle='solid' borderBottomWidth='0' 

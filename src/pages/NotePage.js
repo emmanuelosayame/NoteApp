@@ -2,57 +2,46 @@ import React, {useState, useEffect} from 'react';
 import { useParams , useNavigate} from 'react-router-dom'
 import {Box, Button, IconButton, Textarea, Flex} from '@chakra-ui/react'
 import { CheckIcon, ChevronLeftIcon, DeleteIcon } from '@chakra-ui/icons';
-import { mutate } from 'swr';
+import { addDoc, updateDoc, deleteDoc, doc , collection} from "firebase/firestore";
  
 
-function NotePage({data}) {
+function NotePage({data, db}) {
  
   let noteId = useParams().id
 
   const history = useNavigate()
   
   const [note, setNote] = useState([]);
-  // eslint-disable-next-line
-   useEffect(() => { getNote()},[noteId]);
+
+   useEffect(() => {
   
-  //  const fetcher = (url) => fetch(url).then (res => res.json())
-  //  const { data } = useSWR(`https://fake-server-levi.herokuapp.com/notes/`, fetcher)
-  //  const { mutate } = useSWRConfig()
+      if(noteId === 'new') return
+      const notedata = data?.find(x => x.id === noteId).body
+      setNote(notedata)
+  
+    },[data, noteId]);
+  
     
-  const getNote = async () => {
-    if(noteId === 'new') return;
-    // let response = await fetch(`https://fake-server-levi.herokuapp.com/notes/${noteId}/`;
-    // let data = await response.json();
-    let notedata = await data?.find(x => x.id === parseInt(noteId)).body
-    setNote(notedata)
-  }
 
   const updateNote = async () => {
-     history('/')
-     await fetch(`https://fake-server-levi.herokuapp.com/notes/${noteId}/`, {method: 'PUT', 
-     headers: { 'Content-Type': 'application/json'}, body: JSON.stringify({ 'body':note 
-    , 'updated': new Date() }) }
-     ) 
-   mutate('https://fake-server-levi.herokuapp.com/notes/')
+    history('/')
+     const noteRef = doc(db, "notes", noteId);
+     await updateDoc(noteRef , {
+      body: note, updated: Date()
+     }) 
   }
 
   const createNote = async () => {
     if(note!==null){
       history('/')
-    await fetch(`https://fake-server-levi.herokuapp.com/notes/`, {method: 'POST', 
-    headers: { 'Content-Type': 'application/json'}, body: JSON.stringify({ 'body':note, 'updated': new Date()}) }
-    )
-    mutate('https://fake-server-levi.herokuapp.com/notes/')
-   
+     await addDoc(collection(db, "notes") , {body:note, updated: Date()})
     } else {history('/')}
  }
   
   const deleteNote = async () => {
     history('/')
-    await fetch(`https://fake-server-levi.herokuapp.com/notes/${noteId}/`, {method: 'DELETE', 
-    headers: { 'Content-Type': 'application/json'}}
-    )
-    mutate('https://fake-server-levi.herokuapp.com/notes/')
+  const noteRef = doc(db , "notes", noteId);
+      await deleteDoc(noteRef);
   }
 
  let submitButton = () => {
@@ -60,7 +49,7 @@ function NotePage({data}) {
      deleteNote()
    } else if(noteId !== 'new'){
      updateNote()
-   } else if (noteId === 'new' && note !== null){
+   } else if (noteId === 'new' && note === !null){
      createNote()
    }
    else{history('/')}

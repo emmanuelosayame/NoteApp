@@ -1,18 +1,33 @@
+import { useState , useEffect } from 'react';
 import { Box, Flex , useColorMode} from '@chakra-ui/react';
-import {HashRouter as Router,Routes,Route} from 'react-router-dom'
+import {BrowserRouter as Router,Routes,Route} from 'react-router-dom'
 import './App.css';
 import Header from './components/Header';
 import NoteList from './pages/NoteList'
 import NotePage from './pages/NotePage'
-import  useSWR  from 'swr'
+import { collection, onSnapshot} from "firebase/firestore";
+import {db} from './firebase.js'
+
 
 
 function App() {
+  
+   const [notes, setNotes] = useState([]);
+   
+  useEffect(() => { 
+      const unsub = onSnapshot(collection(db, "notes"), (noteSnapshot) => {
+        const noteList =  noteSnapshot.docs.map((doc)=>{
+          return {...doc.data(), id:doc.id}
+         });
+         setNotes(noteList)
+      })    
+     return unsub
+    },[]);
+
+
+    
  
-  const fetcher = (url) => fetch(url).then (res => res.json())
-  const { data , error } = useSWR('https://fake-server-levi.herokuapp.com/notes/', fetcher,
-  {revalidateOnFocus:false, refreshInterval: 2000, }
-  )
+
 
   const {colorMode} = useColorMode();
 
@@ -26,8 +41,8 @@ function App() {
   <Header />
       <Flex w='100%'mt='8px' >
       <Routes>
-      <Route index path="/" element={<NoteList data={data} error={error}  />} />
-      <Route path="/note/:id" element ={<NotePage animate={true}  data={data} />} />
+      <Route index path="/" element={<NoteList notes={notes} />} />
+      <Route path="/note/:id" element ={<NotePage animate={true} data={notes} db={db} />} />
       </Routes>
       </Flex>
       </Box>
