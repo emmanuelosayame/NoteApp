@@ -14,11 +14,12 @@ function NotePage({data, db}) {
   const [note, setNote] = useState([]);
 
    useEffect(() => {
-  
+     ( async ()=>{
       if(noteId === 'new') return
       const notedata = data?.find(x => x.id === noteId).body
       setNote(notedata)
-  
+      })
+      ()
     },[data, noteId]);
   
     
@@ -31,11 +32,15 @@ function NotePage({data, db}) {
      }) 
   }
 
-  const createNote = async () => {
-    if(note!==null){
+  const createNote =  () => {
+    if(note.length === 0){
       history('/')
-     await addDoc(collection(db, "notes") , {body:note, updated: Date()})
-    } else {history('/')}
+    }
+   else if (note.match(/^ *$/) !== null){
+      history('/')
+     addDoc(collection(db, "notes") , {body:note, updated: Date()})           
+    }
+     history('/')
  }
   
   const deleteNote = async () => {
@@ -45,14 +50,14 @@ function NotePage({data, db}) {
   }
 
  let submitButton = () => {
-   if (noteId !== 'new' && !note) {
+   if (noteId !== 'new' && (note.length === 0 || note.match(/^ *$/) !== null)) {
      deleteNote()
    } else if(noteId !== 'new'){
      updateNote()
-   } else if (noteId === 'new' && note === !null){
+   } else if (noteId === 'new'){
      createNote()
    }
-   else{history('/')}
+   history('/')
  } 
 
 
