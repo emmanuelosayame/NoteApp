@@ -36,7 +36,7 @@ function NotePage({data, db}) {
     if(note.length === 0){
       history('/')
     }
-   else if (note.match(/^ *$/) !== null){
+   else if (note.match(/^ *$/) === null){
       history('/')
      addDoc(collection(db, "notes") , {body:note, updated: Date()})           
     }
