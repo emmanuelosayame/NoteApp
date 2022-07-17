@@ -4,27 +4,7 @@ import {Box, IconButton, Flex,Text , useColorModeValue, Spinner} from '@chakra-u
 import '../App.css';
 import { AddIcon } from '@chakra-ui/icons';
 
-
-function NoteList({data, error}) {
-
-  // const [notes, setNotes] = useState([]);
-  // useEffect(()=>{
-  //   getNotes()
-  // },[])
-
-  // let fetcher = async () => {
-  // let response = await fetch('https://fake-server-levi.herokuapp.com/notes/');
-  // let data = await response.json();
-  //   setNotes(data)
-  // }
-
-//  const url = 'https://fake-server-levi.herokuapp.com/notes/'
-  // const fetcher = (url) => fetch(url).then (res => res.json())
-  // const { data , error } = useSWR('https://fake-server-levi.herokuapp.com/notes/', fetcher,
-  // {revalidateOnFocus:false}
-  // )
-
-  const notes = data
+function NoteList({notes,error}) {
 
   const getTitle = (notes) => {
     let title = String(notes.body).split('\n')[0]
@@ -50,7 +30,11 @@ function NoteList({data, error}) {
    const bg = useColorModeValue('gray.50', 'gray.900')
    const bg2 = useColorModeValue('blue.400', 'blue.800')
 
-   if (error) return <Text fontSize='30' >failed to load notes</Text>
+   if (error && !notes) return (
+     <Box display="flex" mx="auto" alignItems="center" h="100vh" fontSize="30">
+       <Text>oops!!!</Text>
+     </Box>
+   );
    if (!notes) return(
          <Flex justify='center' alignItems='center' w='100%' h='600px' >
          <Spinner  />
